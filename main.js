@@ -2,6 +2,11 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const { AxePuppeteer } = require('@axe-core/puppeteer');
 
+const AXE_LOCALE_JA = require('axe-core/locales/ja.json');
+const config = {
+    locale: AXE_LOCALE_JA
+};
+
 (async () => {
     // ブラウザを起動
     const browser = await puppeteer.launch();
@@ -12,7 +17,7 @@ const { AxePuppeteer } = require('@axe-core/puppeteer');
     await page.goto(url);
 
     // axe-coreをインジェクトしてアクセシビリティ検査を実行
-    const results = await new AxePuppeteer(page).analyze();
+    const results = await new AxePuppeteer(page).configure(config).analyze();
 
     // 検査結果をファイルに保存
     fs.writeFileSync('accessibility-report.json', JSON.stringify(results, null, 2));
